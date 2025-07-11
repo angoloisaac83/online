@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary-color: #3b82f6;
-  --secondary-color: #ec4899;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -34,6 +29,10 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+
+    /* Dynamic colors from site settings */
+    --primary-color: #3b82f6;
+    --secondary-color: #ec4899;
   }
 
   .dark {
@@ -73,58 +72,66 @@
   }
 }
 
-/* Dynamic theming classes */
-.dynamic-primary {
-  background-color: var(--primary-color);
-}
-
-.dynamic-secondary {
-  background-color: var(--secondary-color);
-}
-
-.dynamic-gradient {
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-}
-
-/* Text gradient classes - properly clips background to text */
+/* Dynamic gradient text utility */
 .dynamic-text-gradient {
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-  -webkit-background-clip: text;
+  background: linear-gradient(135deg, var(--primary-color, #3b82f6), var(--secondary-color, #ec4899));
   background-clip: text;
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  /* Ensure text is visible during loading */
-  text-shadow: none;
-}
 
-.dynamic-text-primary {
-  color: var(--primary-color);
-}
-
-.dynamic-text-secondary {
-  color: var(--secondary-color);
-}
-
-.dynamic-border-primary {
-  border-color: var(--primary-color);
-}
-
-.dynamic-border-secondary {
-  border-color: var(--secondary-color);
-}
-
-/* Fallback for browsers that don't support background-clip */
-@supports not (-webkit-background-clip: text) {
-  .dynamic-text-gradient {
+  /* Fallback for browsers that don't support background-clip: text */
+  @supports not (background-clip: text) {
     background: none;
-    color: var(--primary-color);
-    -webkit-text-fill-color: var(--primary-color);
+    color: var(--primary-color, #3b82f6);
+    -webkit-text-fill-color: initial;
+  }
+
+  /* Loading state fallback */
+  &:not([style*="--primary-color"]) {
+    background: linear-gradient(135deg, #3b82f6, #ec4899);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 
-/* Loading state protection */
-.dynamic-text-gradient:not([style*="--primary-color"]) {
-  color: #3b82f6;
-  background: none;
-  -webkit-text-fill-color: #3b82f6;
+/* Dynamic gradient background utility */
+.dynamic-gradient {
+  background: linear-gradient(135deg, var(--primary-color, #3b82f6), var(--secondary-color, #ec4899));
+}
+
+/* Smooth transitions for loading states */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading screen specific styles */
+.loading-screen {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.dark .loading-screen {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* Prevent flash of unstyled content */
+.no-flash {
+  visibility: hidden;
+}
+
+.no-flash.loaded {
+  visibility: visible;
+  animation: fadeIn 0.3s ease-in-out;
 }

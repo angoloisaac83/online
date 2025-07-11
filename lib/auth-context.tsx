@@ -29,6 +29,7 @@ interface AuthContextType {
   user: User | null
   userProfile: any
   loading: boolean
+  initialized: boolean
   error: string | null
   rememberMe: boolean
   setRememberMe: (remember: boolean) => void
@@ -58,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [initialized, setInitialized] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [rememberMe, setRememberMe] = useState(false)
 
@@ -72,6 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!auth) {
       setError("Firebase not configured. Please check your environment variables.")
       setLoading(false)
+      setInitialized(true)
       return
     }
 
@@ -103,7 +106,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         setUserProfile(null)
       }
+
       setLoading(false)
+      // Add a small delay to ensure smooth loading experience
+      setTimeout(() => {
+        setInitialized(true)
+      }, 300)
     })
 
     return unsubscribe
@@ -240,6 +248,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     userProfile,
     loading,
+    initialized,
     error,
     rememberMe,
     setRememberMe,

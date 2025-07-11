@@ -38,6 +38,7 @@ interface SiteSettingsContextType {
   contactSettings: ContactSettings
   bankingSettings: BankingSettings
   loading: boolean
+  initialized: boolean
 }
 
 const defaultSiteSettings: SiteSettings = {
@@ -73,6 +74,7 @@ const SiteSettingsContext = createContext<SiteSettingsContextType>({
   contactSettings: defaultContactSettings,
   bankingSettings: defaultBankingSettings,
   loading: true,
+  initialized: false,
 })
 
 export const useSiteSettings = () => {
@@ -88,9 +90,15 @@ export const SiteSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [contactSettings, setContactSettings] = useState<ContactSettings>(defaultContactSettings)
   const [bankingSettings, setBankingSettings] = useState<BankingSettings>(defaultBankingSettings)
   const [loading, setLoading] = useState(true)
+  const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
-    if (!db) return
+    if (!db) {
+      // If Firebase is not configured, use defaults and mark as initialized
+      setLoading(false)
+      setInitialized(true)
+      return
+    }
 
     const unsubscribe = onSnapshot(
       doc(db, "settings", "site"),
@@ -102,10 +110,15 @@ export const SiteSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ 
           setBankingSettings(data.banking || defaultBankingSettings)
         }
         setLoading(false)
+        // Add a small delay to ensure smooth loading experience
+        setTimeout(() => {
+          setInitialized(true)
+        }, 500)
       },
       (error) => {
         console.error("Error fetching site settings:", error)
         setLoading(false)
+        setInitialized(true)
       },
     )
 
@@ -128,6 +141,7 @@ export const SiteSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ 
         contactSettings,
         bankingSettings,
         loading,
+        initialized,
       }}
     >
       {children}

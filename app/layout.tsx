@@ -6,13 +6,14 @@ import { AuthProvider } from "@/lib/auth-context"
 import { SiteSettingsProvider } from "@/lib/site-settings-context"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { AppLoader } from "@/components/app-loader"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "GlobeFinance - Your Financial Partner",
   description: "Experience modern banking with instant transfers, competitive loans, and 24/7 support.",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <SiteSettingsProvider>
             <AuthProvider>
-              {children}
+              <AppLoader>{children}</AppLoader>
               <Toaster />
             </AuthProvider>
           </SiteSettingsProvider>
