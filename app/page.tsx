@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -138,12 +140,13 @@ export default function HomePage() {
               )}
               <div>
                 <h1
-                  className="text-2xl font-bold bg-clip-text text-transparent"
-                  style={{
-                    background: `linear-gradient(135deg, ${siteSettings.primaryColor}, ${siteSettings.secondaryColor})`,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
+                  className="text-2xl font-bold dynamic-text-gradient"
+                  style={
+                    {
+                      "--primary-color": siteSettings.primaryColor,
+                      "--secondary-color": siteSettings.secondaryColor,
+                    } as React.CSSProperties
+                  }
                 >
                   {siteSettings.siteName}
                 </h1>
@@ -165,7 +168,10 @@ export default function HomePage() {
 
             <div className="flex items-center space-x-4">
               <Link href="/login">
-                <Button variant="ghost" className="text-slate-700 hover:text-slate-900 hover:bg-slate-100">
+                <Button
+                  variant="ghost"
+                  className="text-slate-700 max-[500px]:hidden hover:text-slate-900 hover:bg-slate-100"
+                >
                   Sign In
                 </Button>
               </Link>
@@ -200,12 +206,13 @@ export default function HomePage() {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight">
               Banking Made
               <span
-                className="block bg-clip-text text-transparent"
-                style={{
-                  background: `linear-gradient(135deg, ${siteSettings.primaryColor}, ${siteSettings.secondaryColor})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
+                className="block dynamic-text-gradient"
+                style={
+                  {
+                    "--primary-color": siteSettings.primaryColor,
+                    "--secondary-color": siteSettings.secondaryColor,
+                  } as React.CSSProperties
+                }
               >
                 Simple & Secure
               </span>

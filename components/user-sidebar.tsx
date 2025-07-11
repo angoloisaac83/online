@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -89,12 +91,13 @@ export function UserSidebar() {
               )}
               <div>
                 <span
-                  className="text-lg font-bold bg-clip-text text-transparent"
-                  style={{
-                    background: `linear-gradient(to right, ${siteSettings.primaryColor}, ${siteSettings.secondaryColor})`,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
+                  className="text-lg font-bold dynamic-text-gradient"
+                  style={
+                    {
+                      "--primary-color": siteSettings.primaryColor,
+                      "--secondary-color": siteSettings.secondaryColor,
+                    } as React.CSSProperties
+                  }
                 >
                   {siteSettings.siteName}
                 </span>

@@ -86,6 +86,17 @@
   background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
 }
 
+/* Text gradient classes - properly clips background to text */
+.dynamic-text-gradient {
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Ensure text is visible during loading */
+  text-shadow: none;
+}
+
 .dynamic-text-primary {
   color: var(--primary-color);
 }
@@ -100,4 +111,20 @@
 
 .dynamic-border-secondary {
   border-color: var(--secondary-color);
+}
+
+/* Fallback for browsers that don't support background-clip */
+@supports not (-webkit-background-clip: text) {
+  .dynamic-text-gradient {
+    background: none;
+    color: var(--primary-color);
+    -webkit-text-fill-color: var(--primary-color);
+  }
+}
+
+/* Loading state protection */
+.dynamic-text-gradient:not([style*="--primary-color"]) {
+  color: #3b82f6;
+  background: none;
+  -webkit-text-fill-color: #3b82f6;
 }
